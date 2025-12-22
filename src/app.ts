@@ -16,21 +16,15 @@ app.use(cors({
     credentials: true
 }));
 
-// parser 
-// Parse incoming JSON payloads (e.g. from fetch / axios requests)
-// Allows access to request body via req.body for APIs
 app.use(express.json());
 
-// Parse URL-encoded form data (e.g. HTML <form> submissions)
-// Required to read form fields sent as application/x-www-form-urlencoded
-// `extended: true` enables rich objects & arrays in form data
+
 app.use(express.urlencoded({ extended: true }));
 
 
-// basic usage 
 app.get('/', (req: Request, res: Response) => {
     res.send({
-        Message: "Uns Chat App is running"
+        Message: "Goinnovior Task Running Successfully"
     })
 });
 

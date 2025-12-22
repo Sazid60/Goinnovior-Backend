@@ -1,5 +1,6 @@
 import { Server } from "http";
 import app from "./app";
+import config from "./config";
 
 async function bootstrap() {
     let server: Server;
@@ -7,8 +8,8 @@ async function bootstrap() {
         // TODO: seed admin
 
         // Start the server
-        server = app.listen(5000, () => {
-            console.log(`Server is running on http://localhost:5000`); // Todo : import form env 
+        server = app.listen(config.port, () => {
+            console.log(`Server is running on http://localhost:${config.port}`); 
         });
 
         const exitHandler = () => {
