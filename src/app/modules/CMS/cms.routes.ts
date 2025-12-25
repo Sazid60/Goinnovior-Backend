@@ -10,6 +10,10 @@ router.post(
     multerUpload.single("video"),
     (req: Request, res: Response, next: NextFunction) => {
         if (req.file) req.body.video = req.file.path;
+        if (req.body.data) {
+            const parsed = JSON.parse(req.body.data);
+            req.body = { ...parsed, video: req.body.video };
+        }
         req.body = cmsValidation.createBannerSchema.parse(req.body);
         return cmsController.createBanner(req, res, next);
     }
@@ -22,6 +26,10 @@ router.patch(
     multerUpload.single("video"),
     (req: Request, res: Response, next: NextFunction) => {
         if (req.file) req.body.video = req.file.path;
+        if (req.body.data) {
+            const parsed = JSON.parse(req.body.data);
+            req.body = { ...parsed, video: req.body.video };
+        }
         req.body = cmsValidation.updateBannerSchema.parse(req.body);
         return cmsController.updateBanner(req, res, next);
     }

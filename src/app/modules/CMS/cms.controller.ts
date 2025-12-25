@@ -7,8 +7,7 @@ import { catchAsync } from "../../shared/catchAsync";
 import { sendResponse } from "../../shared/sendResponse";
 
 const createBanner = catchAsync(async (req: Request, res: Response) => {
-    const validated = cmsValidation.createBannerSchema.parse(req.body);
-    const banner = await cmsService.createBanner(validated);
+    const banner = await cmsService.createBanner(req);
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         success: true,

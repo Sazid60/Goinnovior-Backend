@@ -19,7 +19,11 @@ export const deleteImageFromCloudinary = async (url: string) => {
         console.log({ match })
         if (match && match[1]) {
             const public_id = match[1];
-            await cloudinary.uploader.destroy(public_id)
+            let resourceType: "image" | "video" = "image";
+            if (url.includes("/video/") || public_id.match(/\.(mp4|mov|avi|mkv|webm)$/i)) {
+                resourceType = "video";
+            }
+            await cloudinary.uploader.destroy(public_id, { resource_type: resourceType });
             console.log(`File ${public_id} is deleted from cloudinary`);
         }
     } catch (error: any) {

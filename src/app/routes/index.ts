@@ -1,6 +1,7 @@
 import express from 'express';
 import { UserRoutes } from '../modules/User/user.routes';
 import { AuthRoutes } from '../modules/Auth/auth.routes';
+import { CMSRoutes } from '../modules/CMS/cms.routes';
 
 
 
@@ -14,6 +15,10 @@ const moduleRoutes = [
     {
         path: '/auth',
         route: AuthRoutes
+    },
+    {
+        path: '/cms',
+        route: CMSRoutes
     }
 
 ];

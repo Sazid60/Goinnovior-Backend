@@ -4,23 +4,30 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { cloudinaryUpload } from "./cloudinary.config";
 
 
+
 const storage = new CloudinaryStorage({
     cloudinary: cloudinaryUpload,
-    params: {
-        public_id: (req, file) => {
-            const fileName = file.originalname
-                .toLowerCase()
-                .replace(/\s+/g, "-") 
-                .replace(/\./g, "-")
-                // eslint-disable-next-line no-useless-escape
-                .replace(/[^a-z0-9\-\.]/g, "") 
+    params: (req, file) => {
+        const fileName = file.originalname
+            .toLowerCase()
+            .replace(/\s+/g, "-")
+            .replace(/\./g, "-")
+            // eslint-disable-next-line no-useless-escape
+            .replace(/[^a-z0-9\-\.]/g, "");
 
-            const extension = file.originalname.split(".").pop()
-            const uniqueFileName = Math.random().toString(36).substring(2) + "-" + Date.now() + "-" + fileName + "." + extension
+        const extension = file.originalname.split(".").pop();
+        const uniqueFileName = Math.random().toString(36).substring(2) + "-" + Date.now() + "-" + fileName + "." + extension;
 
-            return uniqueFileName
+        let resourceType = "image";
+        if (file.mimetype.startsWith("video/")) {
+            resourceType = "video";
         }
-    },
+
+        return {
+            public_id: uniqueFileName,
+            resource_type: resourceType
+        };
+    }
 });
 
 export const multerUpload = multer({ storage: storage })
