@@ -2,13 +2,30 @@
 import cookieParser from 'cookie-parser';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import router from './app/routes';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
+
+import expressSession from "express-session"
+import config from './app/config';
+import passport from 'passport';
+import "./app/config/passport";
 
 const app: Application = express()
-// Parse Cookie header and populate req.cookies with an object keyed by cookie names
-// This middleware is essential for reading cookies sent by the client (e.g., for authentication, sessions, preferences)
-// Allows you to easily access cookies via req.cookies in your route handlers
-app.use(cookieParser())
 
+
+app.use(expressSession({
+    secret: config.EXPRESS_SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(cookieParser())
+app.use(express.json());
+app.set("trust proxy", 1)
+app.use(express.urlencoded({ extended: true }));
 
 
 app.use(cors({
@@ -16,28 +33,24 @@ app.use(cors({
     credentials: true
 }));
 
-// parser 
-// Parse incoming JSON payloads (e.g. from fetch / axios requests)
-// Allows access to request body via req.body for APIs
-app.use(express.json());
-
-// Parse URL-encoded form data (e.g. HTML <form> submissions)
-// Required to read form fields sent as application/x-www-form-urlencoded
-// `extended: true` enables rich objects & arrays in form data
-app.use(express.urlencoded({ extended: true }));
 
 
-// basic usage 
 app.get('/', (req: Request, res: Response) => {
     res.send({
-        Message: "Uns Chat App is running"
+        Message: "Goinnovior Task Running Successfully"
     })
 });
 
-// use the router 
 
-// global error handler 
 
-// not found route 
+app.use('/api/v1', router);
+
+
+
+
+app.use(globalErrorHandler);
+
+
+app.use(notFound);
 
 export default app;

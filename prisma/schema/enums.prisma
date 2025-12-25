@@ -1,0 +1,15 @@
+enum Role {
+    USER
+    ADMIN
+}
+
+enum Status {
+    BLOCKED
+    UNBLOCKED
+}
+
+enum Provider {
+    GOOGLE
+    CREDENTIALS
+}
+
