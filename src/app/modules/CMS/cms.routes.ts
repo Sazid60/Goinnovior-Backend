@@ -1,79 +1,38 @@
-
-
 import { Router, Request, Response, NextFunction } from "express";
 import { cmsController } from "./cms.controller";
 import { cmsValidation } from "./cms.validation";
 import { multerUpload } from "../../config/multer.config";
-import auth from "../../middlewares/auth";
-import { Role } from "@prisma/client";
 
 const router = Router();
 
 router.post(
-    "/banner",
-    auth(Role.ADMIN),
-    multerUpload.single("video"),
-    (req: Request, res: Response, next: NextFunction) => {
-        if (req.file) req.body.video = req.file.path;
-        if (req.body.data) {
-            const parsed = JSON.parse(req.body.data);
-            req.body = { ...parsed, video: req.body.video };
-        }
-        req.body = cmsValidation.createBannerSchema.parse(req.body);
-        return cmsController.createBanner(req, res, next);
+  "/banner",
+  multerUpload.single("video"),
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.file) req.body.video = req.file.path;
+    if (req.body.data) {
+      const parsed = JSON.parse(req.body.data);
+      req.body = { ...parsed, video: req.body.video };
     }
+    req.body = cmsValidation.createBannerSchema.parse(req.body);
+    return cmsController.createBanner(req, res, next);
+  }
 );
 
 router.get("/banner", cmsController.getBanner);
 
-router.get("/product", cmsController.getAllProducts);
-
-router.post(
-    "/product",
-    auth(Role.ADMIN),
-    multerUpload.single("image"),
-    (req: Request, res: Response, next: NextFunction) => {
-        if (req.file) req.body.image = req.file.path;
-        if (req.body.data) {
-            const parsed = JSON.parse(req.body.data);
-            req.body = { ...parsed, image: req.body.image };
-        }
-        req.body = cmsValidation.createProductSchema.parse(req.body);
-        return cmsController.createProduct(req, res, next);
-    }
-);
-
-
 router.patch(
-    "/product/:id",
-    auth(Role.ADMIN),
-    multerUpload.single("image"),
-    (req: Request, res: Response, next: NextFunction) => {
-        if (req.file) req.body.image = req.file.path;
-        if (req.body.data) {
-            const parsed = JSON.parse(req.body.data);
-            req.body = { ...parsed, image: req.body.image };
-        }
-        req.body = cmsValidation.updateProductSchema.parse(req.body);
-        return cmsController.updateProduct(req, res, next);
+  "/banner/:id",
+  multerUpload.single("video"),
+  (req: Request, res: Response, next: NextFunction) => {
+    if (req.file) req.body.video = req.file.path;
+    if (req.body.data) {
+      const parsed = JSON.parse(req.body.data);
+      req.body = { ...parsed, video: req.body.video };
     }
-);
-
-router.delete("/product/:id", auth(Role.ADMIN), cmsController.deleteProduct);
-
-router.patch(
-    "/banner/:id",
-    auth(Role.ADMIN),
-    multerUpload.single("video"),
-    (req: Request, res: Response, next: NextFunction) => {
-        if (req.file) req.body.video = req.file.path;
-        if (req.body.data) {
-            const parsed = JSON.parse(req.body.data);
-            req.body = { ...parsed, video: req.body.video };
-        }
-        req.body = cmsValidation.updateBannerSchema.parse(req.body);
-        return cmsController.updateBanner(req, res, next);
-    }
+    req.body = cmsValidation.updateBannerSchema.parse(req.body);
+    return cmsController.updateBanner(req, res, next);
+  }
 );
 
 export const CMSRoutes = router;
