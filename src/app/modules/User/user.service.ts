@@ -1,4 +1,4 @@
-import { Client, Role } from "@prisma/client";
+import { AuthProvider, Client, Provider, Role } from "@prisma/client";
 import { deleteImageFromCloudinary } from "../../../config/cloudinary.config";
 import prisma from "../../../shared/prisma";
 import config from "../../../config";
@@ -24,17 +24,17 @@ const register = async (req: Request): Promise<Client> => {
 
     const hashedPassword: string = await bcrypt.hash(req.body.password, Number(config.salt_round))
 
+
     const userData = {
         email: req.body.client.email,
         password: hashedPassword,
         role: Role.USER,
-        name: req.body.client.name 
     }
     console.log(userData)
 
     try {
         const result = await prisma.$transaction(async (transactionClient) => {
-            await transactionClient.user.create({
+            const user = await transactionClient.user.create({
                 data: {
                     ...userData,
                 }
@@ -44,6 +44,14 @@ const register = async (req: Request): Promise<Client> => {
                 data: {
                     ...req.body.client,
                     profilePhoto: imageUrl
+                }
+            });
+
+            await transactionClient.authProvider.create({
+                data: {
+                    provider: Provider.CREDENTIALS,
+                    providerId: req.body.client.email,
+                    userId: user.id
                 }
             });
 

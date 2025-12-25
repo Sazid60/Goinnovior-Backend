@@ -28,7 +28,6 @@ const seedAdmin = async () => {
             data: {
                 email: config.admin_email,
                 password: hashedPassword,
-                name: "Admin",
                 role: Role.ADMIN,
                 admin: {
                     create: {

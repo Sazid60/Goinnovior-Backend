@@ -9,6 +9,7 @@ import { userService } from "./user.service";
 const register = catchAsync(async (req: Request, res: Response) => {
 
     const result = await userService.register(req);
+    console.log(result)
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,

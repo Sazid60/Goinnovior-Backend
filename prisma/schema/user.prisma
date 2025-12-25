@@ -1,6 +1,6 @@
 model AuthProvider {
     id         String @id @default(uuid())
-    provider   String
+    provider   Provider
     providerId String
     userId     String
     user       User   @relation(fields: [userId], references: [id])
@@ -8,7 +8,6 @@ model AuthProvider {
 
 model User {
     id         String         @id @default(uuid())
-    name       String
     email      String         @unique
     password   String?
     role       Role           @default(USER)
