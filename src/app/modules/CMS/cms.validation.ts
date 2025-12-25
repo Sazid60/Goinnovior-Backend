@@ -15,7 +15,26 @@ export const updateBannerSchema = z.object({
     phone: z.string().optional()
 });
 
+export const createProductSchema = z.object({
+    name: z.string().nonempty("Name is required"),
+    description: z.string().nonempty("Description is required"),
+    maxPrice: z.number(),
+    minPrice: z.number(),
+    quantity: z.number(),
+});
+
+export const updateProductSchema = z.object({
+    name: z.string().optional(),
+    description: z.string().optional(),
+    maxPrice: z.number().optional(),
+    minPrice: z.number().optional(),
+    quantity: z.number().optional(),
+    image: z.string().optional(),
+});
+
 export const cmsValidation = {
     createBannerSchema,
-    updateBannerSchema
+    updateBannerSchema,
+    createProductSchema,
+    updateProductSchema
 };

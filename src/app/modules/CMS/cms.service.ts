@@ -2,6 +2,8 @@ import { Request } from "express";
 import prisma from "../../shared/prisma";
 import { Prisma } from "@prisma/client";
 import { deleteImageFromCloudinary } from "../../config/cloudinary.config";
+import pick from "../../shared/pick";
+import { paginationHelper } from "../../helpers/paginationHelper";
 
 const createBanner = async (req: Request) => {
     let videoUrl = "";
@@ -28,12 +30,8 @@ const createBanner = async (req: Request) => {
     }
 };
 
-const getBanners = async () => {
-    return prisma.banner.findMany();
-};
-
-const getBannerById = async (id: string) => {
-    return prisma.banner.findUnique({ where: { id } });
+const getBanner = async () => {
+    return prisma.banner.findFirstOrThrow();
 };
 
 const updateBanner = async (id: string, reqOrBannerData: any) => {
@@ -63,9 +61,108 @@ const updateBanner = async (id: string, reqOrBannerData: any) => {
     }
 };
 
+const createProduct = async (req: Request) => {
+    let imageUrl = "";
+    imageUrl = req.file?.path || "";
+    try {
+        const existingProduct = await prisma.product.findFirst({
+            where: { name: req.body.name }
+        });
+        if (existingProduct) {
+            throw new Error("Product with this name already exists");
+        }
+        const productData: Prisma.ProductCreateInput = {
+            ...req.body,
+            image: imageUrl
+        };
+        const product = await prisma.product.create({ data: productData });
+        return product;
+    } catch (error) {
+        if (imageUrl) {
+            console.log("Deleting from Cloudinary (product):", imageUrl);
+            await deleteImageFromCloudinary(imageUrl);
+        }
+        throw error;
+    }
+};
+
+const updateProduct = async (id: string, reqOrProductData: any) => {
+    let imageUrl = "";
+    let productData: Prisma.ProductUpdateInput;
+    if (reqOrProductData && reqOrProductData.file) {
+        imageUrl = reqOrProductData.file?.path || "";
+        productData = { ...reqOrProductData.body, image: imageUrl };
+    } else {
+        productData = reqOrProductData;
+    }
+    try {
+        if (productData.image) {
+            const oldProduct = await prisma.product.findUnique({ where: { id } });
+            if (oldProduct && oldProduct.image && oldProduct.image !== productData.image) {
+                await deleteImageFromCloudinary(oldProduct.image);
+            }
+        }
+        const updated = await prisma.product.update({ where: { id }, data: productData });
+        return updated;
+    } catch (error) {
+        if (imageUrl) {
+            console.log("Deleting from Cloudinary (product update):", imageUrl);
+            await deleteImageFromCloudinary(imageUrl);
+        }
+        throw error;
+    }
+};
+
+const deleteProduct = async (id: string) => {
+    const product = await prisma.product.findUnique({ where: { id } });
+    if (!product) throw new Error("Product not found");
+    if (product.image) {
+        await deleteImageFromCloudinary(product.image);
+    }
+    return prisma.product.delete({ where: { id } });
+};
+
+const getAllProducts = async (query: any) => {
+    const paginationFields = ["page", "limit", "sortBy", "sortOrder"];
+    const filterFields = ["name", "description"];
+    const paginationOptions = pick(query, paginationFields);
+    const filters = pick(query, filterFields);
+    const { page, limit, skip, sortBy, sortOrder } = paginationHelper.calculatePagination(paginationOptions);
+
+    const where: any = {};
+    if (filters.name) {
+        where.name = { contains: filters.name, mode: "insensitive" };
+    }
+    if (filters.description) {
+        where.description = { contains: filters.description, mode: "insensitive" };
+    }
+
+    const [products, total] = await Promise.all([
+        prisma.product.findMany({
+            where,
+            skip,
+            take: limit,
+            orderBy: { [sortBy]: sortOrder },
+        }),
+        prisma.product.count({ where })
+    ]);
+
+    return {
+        meta: {
+            page,
+            limit,
+            total
+        },
+        data: products
+    };
+};
+
 export const cmsService = {
     createBanner,
-    getBanners,
-    getBannerById,
-    updateBanner
+    getBanner,
+    updateBanner,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getAllProducts
 };
