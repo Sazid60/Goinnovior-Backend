@@ -20,22 +20,8 @@ const register = catchAsync(async (req: Request, res: Response) => {
 });
 
 
-const getUserById = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const result = await userService.getUserById(id);
-
-    console.log(result)
-
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "User retrieved successfully!",
-        data: result
-    })
-});
 
 
 export const userControllers = {
-    register,
-    getUserById
+    register
 };

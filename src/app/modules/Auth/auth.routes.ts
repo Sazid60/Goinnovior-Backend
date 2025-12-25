@@ -3,12 +3,20 @@ import { NextFunction, Request, Response, Router } from "express";
 import passport from "passport";
 import config from "../../config";
 import { AuthControllers } from "./auth.controller";
+import auth from "../../middlewares/auth";
+import { Role } from "@prisma/client";
 
 
 const router = Router()
 
 router.post("/login", AuthControllers.credentialsLogin)
 router.post("/refresh-token", AuthControllers.getNewAccessToken)
+
+router.get(
+    '/me',
+    auth(Role.ADMIN, Role.USER),
+    AuthControllers.getMe
+)
 
 router.get("/google", async (req: Request, res: Response, next: NextFunction) => {
     const redirect = req.query.redirect || "/"
