@@ -1,11 +1,14 @@
 import { Server } from "http";
 import app from "./app";
 import config from "./config";
+import seedAdmin from "./helpers/seedAdmin";
 
 async function bootstrap() {
     let server: Server;
     try {
         // TODO: seed admin
+
+        await seedAdmin()
 
         // Start the server
         server = app.listen(config.port, () => {

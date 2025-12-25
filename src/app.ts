@@ -2,11 +2,11 @@
 import cookieParser from 'cookie-parser';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
+import router from './app/routes';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import notFound from './app/middlewares/notFound';
 
 const app: Application = express()
-// Parse Cookie header and populate req.cookies with an object keyed by cookie names
-// This middleware is essential for reading cookies sent by the client (e.g., for authentication, sessions, preferences)
-// Allows you to easily access cookies via req.cookies in your route handlers
 app.use(cookieParser())
 
 
@@ -28,10 +28,16 @@ app.get('/', (req: Request, res: Response) => {
     })
 });
 
-// use the router 
 
-// global error handler 
 
-// not found route 
+app.use('/api/v1', router);
+
+
+
+
+app.use(globalErrorHandler);
+
+
+app.use(notFound);
 
 export default app;

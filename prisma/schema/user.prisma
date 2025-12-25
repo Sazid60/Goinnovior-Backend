@@ -12,8 +12,6 @@ model User {
     email      String         @unique
     password   String?
     role       Role           @default(USER)
-    phone      String?
-    picture    String?
     status     Status         @default(UNBLOCKED)
     isVerified Boolean        @default(true)
     auths      AuthProvider[]
