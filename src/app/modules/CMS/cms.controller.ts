@@ -1,4 +1,3 @@
-
 import { Request, Response } from "express";
 import httpStatus from 'http-status';
 import { cmsService } from "./cms.service";
@@ -16,28 +15,8 @@ const createBanner = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
-const getBanners = catchAsync(async (req: Request, res: Response) => {
-    const banners = await cmsService.getBanners();
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: "Banners retrieved successfully!",
-        data: banners
-    });
-});
-
-const getBannerById = catchAsync(async (req: Request, res: Response) => {
-    const { id } = req.params;
-    const banner = await cmsService.getBannerById(id);
-    if (!banner) {
-        sendResponse(res, {
-            statusCode: httpStatus.NOT_FOUND,
-            success: false,
-            message: "Banner not found",
-            data: null
-        });
-        return;
-    }
+const getBanner = catchAsync(async (req: Request, res: Response) => {
+    const banner = await cmsService.getBanner();
     sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
@@ -45,6 +24,8 @@ const getBannerById = catchAsync(async (req: Request, res: Response) => {
         data: banner
     });
 });
+
+
 
 const updateBanner = catchAsync(async (req: Request, res: Response) => {
     const { id } = req.params;
@@ -58,9 +39,56 @@ const updateBanner = catchAsync(async (req: Request, res: Response) => {
     });
 });
 
+const createProduct = catchAsync(async (req: Request, res: Response) => {
+    const product = await cmsService.createProduct(req);
+    sendResponse(res, {
+        statusCode: httpStatus.CREATED,
+        success: true,
+        message: "Product created successfully!",
+        data: product
+    });
+});
+
+const updateProduct = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const validated = cmsValidation.updateProductSchema.parse(req.body);
+    const product = await cmsService.updateProduct(id, validated);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Product updated successfully!",
+        data: product
+    });
+});
+
+const deleteProduct = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await cmsService.deleteProduct(id);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Product deleted successfully!",
+        data: null
+    });
+});
+
+const getAllProducts = catchAsync(async (req: Request, res: Response) => {
+    const result = await cmsService.getAllProducts(req.query);
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "Products retrieved successfully!",
+        meta: result.meta,
+        data: result.data
+    });
+});
+
 export const cmsController = {
     createBanner,
-    getBanners,
-    getBannerById,
-    updateBanner
+    getBanner,
+    updateBanner,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    getAllProducts
 };
