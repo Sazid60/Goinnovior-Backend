@@ -1,7 +1,7 @@
 
-import { Role } from "@prisma/client";
+
 import { NextFunction, Request, Response, Router } from "express";
-import { multerUpload } from "../../../config/multer.config";
+import { multerUpload } from "../../config/multer.config";
 import { userValidation } from "./user.validation";
 import { userControllers } from "./user.controller";
 
@@ -19,6 +19,8 @@ router.post(
         return userControllers.register(req, res, next)
     }
 );
+
+router.get("/:id", userControllers.getUserById);
 
 
 

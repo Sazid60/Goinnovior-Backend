@@ -17,6 +17,10 @@ export default {
   port: requireEnv("PORT"),
   database_url: requireEnv("DATABASE_URL"),
   FRONTEND_URL: requireEnv("FRONTEND_URL"),
+  GOOGLE_CLIENT_ID: requireEnv("GOOGLE_CLIENT_ID"),
+  GOOGLE_CLIENT_SECRET: requireEnv("GOOGLE_CLIENT_SECRET"),
+  GOOGLE_CALLBACK_URL: requireEnv("GOOGLE_CALLBACK_URL"),
+  EXPRESS_SESSION_SECRET: requireEnv("EXPRESS_SESSION_SECRET"),
 
   cloudinary: {
     api_secret: requireEnv("CLOUDINARY_API_SECRET"),

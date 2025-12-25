@@ -1,7 +1,8 @@
 import { Server } from "http";
 import app from "./app";
-import config from "./config";
-import seedAdmin from "./helpers/seedAdmin";
+
+import seedAdmin from "./app/helpers/seedAdmin";
+import config from "./app/config";
 
 async function bootstrap() {
     let server: Server;
@@ -12,7 +13,7 @@ async function bootstrap() {
 
         // Start the server
         server = app.listen(config.port, () => {
-            console.log(`Server is running on http://localhost:${config.port}`); 
+            console.log(`Server is running on http://localhost:${config.port}`);
         });
 
         const exitHandler = () => {
@@ -29,6 +30,7 @@ async function bootstrap() {
         // Handle unhandled promise rejections
         process.on('unhandledRejection', (error) => {
             console.log('Unhandled Rejection is detected, we are closing our server...');
+            console.log(error)
             exitHandler()
         });
 

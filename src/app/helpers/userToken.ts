@@ -3,8 +3,9 @@ import { jwtHelper } from "./jwtHelper";
 import config from "../config";
 
 import { Status, User } from "@prisma/client";
+
+import ApiError from "../errors/ApiError";
 import prisma from "../shared/prisma";
-import ApiError from "../app/errors/ApiError";
 
 
 
@@ -78,5 +79,5 @@ export const createNewAccessTokenWithRefreshToken = async (refreshToken: string)
     );
 
 
-    return { accessToken, refreshToken: newRefreshToken};
+    return { accessToken, refreshToken: newRefreshToken };
 };

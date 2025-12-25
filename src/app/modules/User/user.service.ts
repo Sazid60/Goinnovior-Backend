@@ -1,9 +1,10 @@
-import { AuthProvider, Client, Provider, Role } from "@prisma/client";
-import { deleteImageFromCloudinary } from "../../../config/cloudinary.config";
-import prisma from "../../../shared/prisma";
-import config from "../../../config";
+import { AuthProvider, Client, Provider, Role, User } from "@prisma/client";
+import { deleteImageFromCloudinary } from "../../config/cloudinary.config";
+
+import config from "../../config";
 import bcrypt from "bcryptjs";
 import { Request } from "express";
+import prisma from "../../shared/prisma";
 
 
 
@@ -66,6 +67,27 @@ const register = async (req: Request): Promise<Client> => {
 };
 
 
+
+const getUserById = async (id: string): Promise<User> => {
+    console.log(id)
+    const user = await prisma.user.findUnique({
+        where: { id: id },
+        include: {
+            auths: true,
+            client: true
+        }
+    });
+
+    console.log(user)
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+    return user;
+}
+
+
 export const userService = {
-    register
+    register,
+    getUserById
 };

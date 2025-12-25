@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
+
 import httpStatus from 'http-status';
 import { userService } from "./user.service";
+import { catchAsync } from "../../shared/catchAsync";
+import { sendResponse } from "../../shared/sendResponse";
 
 
 
@@ -19,6 +20,22 @@ const register = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const getUserById = catchAsync(async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const result = await userService.getUserById(id);
+
+    console.log(result)
+
+    sendResponse(res, {
+        statusCode: httpStatus.OK,
+        success: true,
+        message: "User retrieved successfully!",
+        data: result
+    })
+});
+
+
 export const userControllers = {
-    register
+    register,
+    getUserById
 };

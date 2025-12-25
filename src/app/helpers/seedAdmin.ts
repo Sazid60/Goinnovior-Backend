@@ -1,11 +1,10 @@
-
 import * as bcrypt from 'bcryptjs';
 
 
 import config from '../config';
 
 import prisma from '../shared/prisma';
-import { Role } from '@prisma/client';
+import { Provider, Role } from '@prisma/client';
 
 
 
@@ -32,9 +31,15 @@ const seedAdmin = async () => {
                 admin: {
                     create: {
                         name: "Admin",
-                        profilePhoto: "https://res.cloudinary.com/dosvjludu/image/upload/v1759681814/c1309i14mi8-1759681814423-sazid-webp.webp.webp",   
+                        profilePhoto: "https://res.cloudinary.com/dosvjludu/image/upload/v1759681814/c1309i14mi8-1759681814423-sazid-webp.webp.webp",
                         contactNumber: "+8801234567890"
                     }
+                },
+                auths: {
+                    create: [{
+                        provider: Provider.CREDENTIALS,
+                        providerId: config.admin_email
+                    }]
                 }
             }
         });

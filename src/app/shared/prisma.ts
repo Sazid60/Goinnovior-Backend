@@ -5,10 +5,10 @@ import config from "../config";
 
 
 const pool = new Pool({
-    connectionString: config.database_url, 
-    max: 20, 
-    idleTimeoutMillis: 30000, 
-    connectionTimeoutMillis: 10000, 
+    connectionString: config.database_url,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 10000,
 })
 
 const adapter = new PrismaPg(pool);
