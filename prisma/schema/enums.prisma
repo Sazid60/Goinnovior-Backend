@@ -3,7 +3,7 @@ enum Role {
     ADMIN
 }
 
-enum IsBlocked {
+enum Status {
     BLOCKED
     UNBLOCKED
 }

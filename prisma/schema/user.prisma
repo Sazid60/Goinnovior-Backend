@@ -1,4 +1,3 @@
-
 model AuthProvider {
     id         String @id @default(uuid())
     provider   String
@@ -8,25 +7,46 @@ model AuthProvider {
 }
 
 model User {
-    id          String         @id @default(uuid())
-    name        String
-    email       String         @unique
-    password    String?
-    role        Role           @default(USER)
-    phone       String?
-    picture     String?
-    isBlocked   IsBlocked      @default(UNBLOCKED)
-    isVerified  Boolean        @default(true)
-    auths       AuthProvider[]
-    createdAt   DateTime       @default(now())
-    updatedAt   DateTime       @updatedAt
+    id         String         @id @default(uuid())
+    name       String
+    email      String         @unique
+    password   String?
+    role       Role           @default(USER)
+    phone      String?
+    picture    String?
+    status     Status         @default(UNBLOCKED)
+    isVerified Boolean        @default(true)
+    auths      AuthProvider[]
+    admin      Admin?
+    client     Client?
+    createdAt  DateTime       @default(now())
+    updatedAt  DateTime       @updatedAt
+
     @@map("users")
 }
 
+model Admin {
+    id            String   @id @default(uuid())
+    name          String
+    email         String   @unique
+    profilePhoto  String
+    contactNumber String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    user User @relation(fields: [email], references: [email])
 
+    @@map("admins")
+}
 
+model Client {
+    id            String   @id @default(uuid())
+    name          String
+    email         String   @unique
+    profilePhoto  String
+    contactNumber String
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    user User @relation(fields: [email], references: [email])
 
-
-
-
-
+    @@map("clients")
+}
