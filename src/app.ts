@@ -1,4 +1,3 @@
-
 import cookieParser from 'cookie-parser';
 import express, { Application, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
@@ -52,5 +51,7 @@ app.use(globalErrorHandler);
 
 
 app.use(notFound);
+
+console.log("Google Callback URL being used:", config.GOOGLE_CALLBACK_URL);
 
 export default app;
