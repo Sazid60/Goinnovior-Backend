@@ -68,26 +68,9 @@ const register = async (req: Request): Promise<Client> => {
 
 
 
-const getUserById = async (id: string): Promise<User> => {
-    console.log(id)
-    const user = await prisma.user.findUnique({
-        where: { id: id },
-        include: {
-            auths: true,
-            client: true
-        }
-    });
-
-    console.log(user)
-
-    if (!user) {
-        throw new Error("User not found");
-    }
-    return user;
-}
 
 
 export const userService = {
-    register,
-    getUserById
+    register
+
 };

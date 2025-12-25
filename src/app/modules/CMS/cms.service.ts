@@ -4,6 +4,8 @@ import { Prisma } from "@prisma/client";
 import { deleteImageFromCloudinary } from "../../config/cloudinary.config";
 import pick from "../../shared/pick";
 import { paginationHelper } from "../../helpers/paginationHelper";
+import ApiError from "../../errors/ApiError";
+import httpStatus from 'http-status-codes';
 
 const createBanner = async (req: Request) => {
     let videoUrl = "";
@@ -46,6 +48,9 @@ const updateBanner = async (id: string, reqOrBannerData: any) => {
     try {
         if (bannerData.video) {
             const oldBanner = await prisma.banner.findUnique({ where: { id } });
+            if (!oldBanner) {
+                throw new ApiError(httpStatus.NOT_FOUND, "Banner not found");
+            }
             if (oldBanner && oldBanner.video && oldBanner.video !== bannerData.video) {
                 await deleteImageFromCloudinary(oldBanner.video);
             }
@@ -98,6 +103,9 @@ const updateProduct = async (id: string, reqOrProductData: any) => {
     try {
         if (productData.image) {
             const oldProduct = await prisma.product.findUnique({ where: { id } });
+            if (!oldProduct) {
+                 throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+            }
             if (oldProduct && oldProduct.image && oldProduct.image !== productData.image) {
                 await deleteImageFromCloudinary(oldProduct.image);
             }

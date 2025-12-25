@@ -4,6 +4,9 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 -- CreateEnum
 CREATE TYPE "Status" AS ENUM ('BLOCKED', 'UNBLOCKED');
 
+-- CreateEnum
+CREATE TYPE "Provider" AS ENUM ('GOOGLE', 'CREDENTIALS');
+
 -- CreateTable
 CREATE TABLE "banner" (
     "id" TEXT NOT NULL,
@@ -34,7 +37,7 @@ CREATE TABLE "products" (
 -- CreateTable
 CREATE TABLE "AuthProvider" (
     "id" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
+    "provider" "Provider" NOT NULL,
     "providerId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
 
@@ -61,7 +64,7 @@ CREATE TABLE "admins" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "profilePhoto" TEXT NOT NULL,
-    "contactNumber" TEXT NOT NULL,
+    "contactNumber" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -74,7 +77,7 @@ CREATE TABLE "clients" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "profilePhoto" TEXT NOT NULL,
-    "contactNumber" TEXT NOT NULL,
+    "contactNumber" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
