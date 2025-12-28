@@ -6,6 +6,12 @@ A robust backend API built with Node.js, Express, TypeScript, and Prisma ORM, de
 ### Live Link : [Gonnivior E-Commerce Frontend](https://gonnivior-frontend.vercel.app/)
 ### Frontend Repo : [Gonnivior E-Commerce Frontend](https://github.com/Sazid60/Goinnovior-Frontend.git)
 
+
+#### Admin Login Credential
+
+- ADMIN_EMAIL= admin@gmail.com
+- ADMIN_PASSWORD= Admin@12345
+
 ## Features
 
 - **User Authentication & Authorization**:
