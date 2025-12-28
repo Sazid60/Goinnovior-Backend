@@ -122,7 +122,7 @@ const googleCallbackController = catchAsync(
             redirectTo = redirectTo.slice(1)
         }
 
-        const userTokens = createUserToken(user);
+        const userTokens = await createUserToken(user);
 
         const accessTokenMaxAge = convertExpiresInToMs(
             config.jwt.expires_in,
