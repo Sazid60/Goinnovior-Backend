@@ -2,16 +2,63 @@
 
 A robust backend API built with Node.js, Express, TypeScript, and Prisma ORM, designed for a CMS and user management system with authentication, admin, and product management features.
 
+
+### Live Link : [Gonnivior E-Commerce Frontend](https://gonnivior-frontend.vercel.app/)
+### Frontend Repo : [Gonnivior E-Commerce Frontend](https://github.com/Sazid60/Goinnovior-Frontend.git)
+
 ## Features
 
-- **User Authentication**: Local and Google OAuth2 login, JWT-based sessions, secure password handling.
-- **Admin & User Management**: Register, login, and manage users and admins with role-based access.
-- **CMS Module**: Manage banners and content for the frontend.
-- **Product Management**: CRUD operations for products.
-- **File Uploads**: Integrated with Cloudinary for media storage, using Multer for handling uploads.
-- **Rate Limiting & Security**: Express session, rate limiting, CORS, and secure cookie handling.
-- **Error Handling**: Centralized error and not-found middleware.
-- **Prisma ORM**: PostgreSQL database with Prisma schema for users, admins, clients, products, and banners.
+- **User Authentication & Authorization**:
+  - Local (email/password) and Google OAuth2 login
+  - JWT-based sessions with secure cookie storage
+  - Refresh token rotation and access token renewal
+  - Role-based access control (Admin, User)
+- **User & Admin Management**:
+  - Register, login, and manage users and admins
+  - Profile update, password hashing, and validation
+  - Admin-only endpoints for user management
+- **CMS Module**:
+  - Manage banners and content for the frontend
+  - CRUD operations for CMS banners
+- **Product Management**:
+  - Full CRUD for products (create, read, update, delete)
+  - Pagination and filtering support
+- **File Uploads**:
+  - Integrated with Cloudinary for media storage
+  - Multer middleware for handling file uploads
+- **Security & Rate Limiting**:
+  - Express session and secure cookie handling
+  - Rate limiting middleware to prevent abuse
+  - CORS configuration for frontend integration
+- **Error Handling**:
+  - Centralized error and not-found middleware
+  - Consistent API error responses
+- **Prisma ORM & PostgreSQL**:
+  - Prisma schema for users, admins, clients, products, banners
+  - Transactional operations and migrations
+- **API Structure**:
+  - RESTful endpoints grouped by modules (User, Auth, CMS, Admin)
+  - Modular route and controller structure
+- **Developer Experience**:
+  - TypeScript types and interfaces for safety
+  - Utility helpers for JWT, pagination, seeding, etc.
+  - Environment-based configuration
+
+## Main Modules Overview
+
+- **Auth Module**: Handles login, registration, Google OAuth, token refresh, and user info endpoints.
+- **User Module**: User registration, profile management, and user-specific endpoints.
+- **Admin Module**: Admin registration, login, and privileged user management.
+- **CMS Module**: Banner/content CRUD for frontend display.
+- **Product Module**: Product CRUD, listing, and filtering.
+
+## API Highlights
+
+- **Authentication**: `/api/v1/auth/login`, `/api/v1/auth/google`, `/api/v1/auth/refresh-token`, `/api/v1/auth/me`
+- **User**: `/api/v1/user/register`, `/api/v1/user/profile`, `/api/v1/user/update`
+- **Admin**: `/api/v1/admin/register`, `/api/v1/admin/login`, `/api/v1/admin/users`
+- **CMS**: `/api/v1/cms/banner`, `/api/v1/cms/banner/:id`
+- **Product**: `/api/v1/cms/product`, `/api/v1/cms/product/:id`
 
 ## Project Structure
 
@@ -102,6 +149,6 @@ SALT_ROUND=10
 - `npm run build` - Compile TypeScript
 - `npm start` - Run compiled server
 
-
 ---
+
 
