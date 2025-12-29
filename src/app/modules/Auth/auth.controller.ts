@@ -108,22 +108,14 @@ const getMe = catchAsync(async (req: Request, res: Response) => {
 const googleCallbackController = catchAsync(
     async (req: Request, res: Response, next: NextFunction) => {
         const user = req.user;
-
-        console.log("Google Callback - User:", user ? "Found" : "Not Found");
-        console.log("Google Callback - State:", req.query.state);
-
         if (!user) {
             throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
         }
-
         let redirectTo = req.query.state ? req.query.state as string : "";
-
         if (redirectTo.startsWith("/")) {
-            redirectTo = redirectTo.slice(1)
+            redirectTo = redirectTo.slice(1);
         }
-
         const userTokens = await createUserToken(user);
-
         const accessTokenMaxAge = convertExpiresInToMs(
             config.jwt.expires_in,
             1000 * 60 * 60
@@ -132,17 +124,15 @@ const googleCallbackController = catchAsync(
             config.jwt.refresh_token_expires_in,
             1000 * 60 * 60 * 24 * 30
         );
-
-        const tokenInfo = {
-            ...userTokens,
-            accessTokenMaxAge: accessTokenMaxAge,
-            refreshTokenMaxAge: refreshTokenMaxAge,
-        };
-
-        setAuthCookie(res, tokenInfo);
-
-
-        res.redirect(`${config.FRONTEND_URL}/${redirectTo}`)
+ 
+        const params = new URLSearchParams({
+            accessToken: userTokens.accessToken,
+            refreshToken: userTokens.refreshToken,
+            accessTokenMaxAge: accessTokenMaxAge.toString(),
+            refreshTokenMaxAge: refreshTokenMaxAge.toString(),
+            redirect: redirectTo,
+        });
+        res.redirect(`${config.FRONTEND_URL}/callback?${params.toString()}`);
     }
 );
 
